@@ -2,47 +2,24 @@ require('./config/config');
 
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
+const bodyParser = require('body-parser');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+// middleware, que se ejecuta antes de la petición
+app.use(require('./routes/usuario'));
 
+// si la bbdd no existe, mooongose la crea
+mongoose.connect(process.env.URLDB, (err, res) => {
 
-app.get('/usuario', function(req, res) {
-    res.json('Get usuario');
-});
+    if (err) throw err;
 
-app.post('/usuario', function(req, res) {
-
-    let body = req.body;
-
-    if (body.nombre === undefined) {
-        res.status(400).json({
-            ok: false,
-            mensage: 'Algo salió mal'
-        });
-    } else {
-        res.json({
-            persona: body
-        });
-    }
-});
-
-app.put('/usuario/:id', function(req, res) {
-
-    let id = req.params.id;
-
-    res.json({
-        id // en es6 es lo mismo que poner id = id
-    });
-});
-
-app.delete('/usuario', function(req, res) {
-    res.json('Delete usuario');
+    console.log('Base de datos online');
 });
 
 app.listen(process.env.PORT, () => {
