@@ -5,11 +5,15 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore'); // el standard de uso hace que pongamos un guion como nombre
 
 const Usuario = require('../models/usuario');
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion'); // destructuración
 
 const app = express();
 
-
-app.get('/usuario', function(req, res) {
+//=================================================
+// Obtener todos los usuarios
+//=================================================
+// el middleware verificaToken se ejecutara cada vez que se haga un get
+app.get('/usuario', verificaToken, (req, res) => {
 
     let desde = req.query.desde || 0; // si no viene el valor de la query (al ser un GET) entonces ponemos 0
 
@@ -19,7 +23,7 @@ app.get('/usuario', function(req, res) {
 
     limite = Number(limite);
 
-    Usuario.find({ estado: true }, 'nombre email role  estado google  img') // {} este objeto son las condiciones del find; con el otro campo decimos que campos deseamos regresar
+    Usuario.find({ estado: true }, 'nombre email role estado google  img') // {} este objeto son las condiciones del find; con el otro campo decimos que campos deseamos regresar
         .skip(desde)
         .limit(limite)
         .exec((err, usuarios) => {
@@ -51,7 +55,10 @@ app.get('/usuario', function(req, res) {
 
 });
 
-app.post('/usuario', function(req, res) {
+//=================================================
+// Crear nuevo usuario
+//=================================================
+app.post('/usuario', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let body = req.body;
 
@@ -84,7 +91,10 @@ app.post('/usuario', function(req, res) {
 
 });
 
-app.put('/usuario/:id', function(req, res) {
+//=================================================
+// Actualizar usuario
+//=================================================
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let id = req.params.id;
     // underscore con pick decimos los campos que necesitemos  
@@ -112,7 +122,10 @@ app.put('/usuario/:id', function(req, res) {
 
 });
 
-app.delete('/usuario/:id', function(req, res) {
+//=================================================
+// Borrar usuario
+//=================================================
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let id = req.params.id;
 
