@@ -1,13 +1,41 @@
 const jwt = require('jsonwebtoken');
 
 // ================================
-// Verificar token
+// Verificar token por el HEADER
 // ================================
 
 let verificaToken = (req, res, next) => {
 
     // de esta forma obtenemos el header token
     let token = req.get('token');
+
+    // el decoded es el objeto JSON decodificado. Es decir, el payload (la parte que va entre la cabecera y la firma. En nuestro caso es el usuario)
+    jwt.verify(token, process.env.SEED, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                err: {
+                    message: 'token no válido'
+                }
+            });
+        }
+
+        req.usuario = decoded.usuario;
+
+        next();
+    });
+
+};
+
+// ================================
+// Verificar token en la url para imagenes
+// ================================
+
+let verificaTokenImg = (req, res, next) => {
+
+    // de esta forma obtenemos el header token
+    let token = req.query.token;
 
     // el decoded es el objeto JSON decodificado. Es decir, el payload (la parte que va entre la cabecera y la firma. En nuestro caso es el usuario)
     jwt.verify(token, process.env.SEED, (err, decoded) => {
@@ -48,5 +76,6 @@ let verificaAdmin_Role = (req, res, next) => {
 
 module.exports = {
     verificaToken,
-    verificaAdmin_Role
+    verificaAdmin_Role,
+    verificaTokenImg
 };
