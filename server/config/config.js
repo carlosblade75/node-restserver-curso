@@ -13,7 +13,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // =============================================
 // VENCIMIENTO DEL TOKEN
 // =============================================
-process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30; // segundos*minutos+horas*dias-- 30 días de duración
+process.env.CADUCIDAD_TOKEN = '48h';
 
 // =============================================
 // SEED DE AUTENTICACIÓN
@@ -37,5 +37,5 @@ process.env.URLDB = urlDB;
 // =============================================
 // GOOGLE CLIENT ID
 // =============================================
-
+// podemos establecer en HEROKU la variable de entorno CLIENT_ID. en caso de que no existe, cogerá la otra
 process.env.CLIENT_ID = process.env.CLIENT_ID || '373281651260-ed10nv9gbv15pol2dqui03aeu0886ruq.apps.googleusercontent.com';

@@ -30,7 +30,9 @@ let verificaToken = (req, res, next) => {
 
 let verificaAdmin_Role = (req, res, next) => {
 
-    var usuario = req.usuario;
+    let usuario = req.usuario; // esto viene del middleware de arriba
+
+
 
     if (usuario.role === 'ADMIN_ROLE') {
 

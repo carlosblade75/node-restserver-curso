@@ -10,7 +10,7 @@ const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticac
 const app = express();
 
 //=================================================
-// Obtener todos los usuarios
+// Obtener todos los usuarios - Paginado
 //=================================================
 // el middleware verificaToken se ejecutara cada vez que se haga un get
 app.get('/usuario', verificaToken, (req, res) => {
